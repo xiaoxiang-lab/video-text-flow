@@ -1,0 +1,6 @@
+{
+  "name": "durex-style-copy-assets",
+  "private": true,
+  "description": "杜蕾斯式海报合成脚本的依赖。运行 compose_canvas.js 前先 npm i",
+  "dependencies": { "@napi-rs/canvas": "^0.1.60" }
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "fresh-scrapbook",
+  "name": "Fresh Scrapbook",
+  "summary": "清新手账系：米白底、薄荷浅绿、珊瑚红点缀，圆角贴纸、胶带、便签、手绘线，适合生活/美食/旅行/健康/育儿类轻松讲解。",
+  "status": "stable",
+  "master_prompt_file": "ref/fresh-scrapbook/master-prompt.zh.txt",
+  "guide_files": ["ref/fresh-scrapbook/guide.zh.md"],
+  "reference_files": [],
+  "default_shot_seconds": 4
+}

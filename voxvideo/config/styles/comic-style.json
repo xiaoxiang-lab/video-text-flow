@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "comic-style",
+  "name": "Comic Style",
+  "summary": "纸拼贴美漫世界：粗炭笔轮廓、Ben-Day 网点、物理分格边框的强节奏漫画。",
+  "status": "stable",
+  "master_prompt_file": "ref/comic-style/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/comic-style/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S21-美漫风格.jpg"
+  ],
+  "default_shot_seconds": 4
+}

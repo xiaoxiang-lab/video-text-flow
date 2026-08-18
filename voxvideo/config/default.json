@@ -1,0 +1,60 @@
+{
+  "schema_version": 3,
+  "image_adapter": "agnes",
+  "agnes": {
+    "endpoint": "https://apihub.agnes-ai.com/v1/images/generations",
+    "model": "agnes-image-2.1-flash",
+    "size": "2K",
+    "ratio": "16:9",
+    "timeout_seconds": 180,
+    "download_proxy": "",
+    "auto_detect_proxy": true
+  },
+  "jimeng": {
+    "binary": "dreamina",
+    "session": 0,
+    "model": "5.0",
+    "resolution": "2k",
+    "poll_seconds": 30,
+    "timeout_seconds": 1800
+  },
+  "style": {
+    "default": "vox",
+    "profiles_dir": "config/styles"
+  },
+  "workflow": {
+    "default_shot_seconds": 4
+  },
+  "narration": {
+    "provider": "mimo-tts",
+    "qwen3_tts": {
+      "wsl_distro": "Ubuntu-24.04",
+      "cli": "/root/s2s/.venv/bin/faster-qwen3-tts",
+      "model": "/root/models/qwen3tts",
+      "ref_audio": "/root/s2s/ref.wav",
+      "ref_text": "7月30号，GPT-5.6 Luna降价80%，输入从每百万token一美元降到两毛钱。Replit总裁说，这是他见过最接近\"便宜到不用计量\"的模型。但便宜和能用，是两件事。",
+      "language": "Chinese",
+      "device": "cuda",
+      "output_dir": "/tmp/voxvideo-tts",
+      "startup_timeout_seconds": 120,
+      "gen_timeout_seconds": 120
+    },
+    "endpoint": "https://api.fish.audio/v1/tts",
+    "api_key_env": "FISH_API_KEY",
+    "voice_env": "FISH_VOICE_ID",
+    "model_env": "FISH_MODEL",
+    "default_model": "s2-pro",
+    "format": "wav",
+    "speed": 1.0,
+    "timeout_seconds": 180
+  },
+  "mimo_tts": {
+    "endpoint": "https://token-plan-cn.xiaomimimo.com/v1/chat/completions",
+    "api_key_env": "MIMO_API_KEY",
+    "model": "mimo-v2.5-tts",
+    "voice": "mimo_default",
+    "style_prompt": "用明快干脆的解说语调，语速偏快，利落自然。",
+    "format": "wav",
+    "timeout_seconds": 300
+  }
+}

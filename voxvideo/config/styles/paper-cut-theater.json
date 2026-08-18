@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "paper-cut-theater",
+  "name": "Paper-Cut Theater",
+  "summary": "层叠剪影舞台世界：红、炭灰、象牙的完整剪影层，幕布挖字与层间留缝。",
+  "status": "stable",
+  "master_prompt_file": "ref/paper-cut-theater/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/paper-cut-theater/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S14-剪纸剧场.jpg"
+  ],
+  "default_shot_seconds": 4
+}

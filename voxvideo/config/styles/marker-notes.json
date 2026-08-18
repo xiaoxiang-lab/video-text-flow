@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "marker-notes",
+  "name": "Marker Notes",
+  "summary": "俯拍实验笔记本世界：米白网格纸、黑色马克笔图解、珊瑚便签的教程感。",
+  "status": "stable",
+  "master_prompt_file": "ref/marker-notes/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/marker-notes/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S18-马克笔记.jpg"
+  ],
+  "default_shot_seconds": 4
+}

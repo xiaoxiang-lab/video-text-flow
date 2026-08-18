@@ -1,0 +1,315 @@
+可以。让 OpenCode 完成这件事，核心不是“告诉它一句帮我做视频”，而是给它补上三样东西：
+
+1. 能操作真实 Chrome 的工具  
+2. 一个隔离的、只登录 Flow 的浏览器环境  
+3. 一套严格的项目执行规则  
+
+最推荐的方案是：
+
+> OpenCode + Chrome DevTools MCP + 独立 Chrome 配置文件 + `handoff.md` 项目指令
+
+Chrome DevTools MCP 目前支持打开页面、点击、输入、截图、上传文件等浏览器操作；OpenCode 可以通过 MCP 接入这些工具。[Chrome DevTools MCP 工具列表](https://github.com/ChromeDevTools/chrome-devtools-mcp)、[OpenCode MCP 文档](https://opencode.ai/v2/docs/mcp-servers)
+
+## 一、先准备一个专用 Chrome
+
+不要直接把你日常 Chrome 主账户交给 OpenCode。
+
+建议建立一个只用于 Flow 的独立 Chrome 配置文件。它里面只登录：
+
+- Google Flow
+- 可能需要的 Google 账号
+
+不要在这个配置文件里打开：
+
+- Gmail
+- Google Drive
+- 网银
+- 密码管理器
+- 公司后台
+- 其他包含隐私数据的页面
+
+在 PowerShell 中启动专用 Chrome：
+
+```powershell
+& "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="$env:USERPROFILE\.chrome-flow-agent" "https://labs.google/fx/tools/flow"
+```
+
+如果 Chrome 安装在 `Program Files (x86)`，把路径改成：
+
+```powershell
+& "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="$env:USERPROFILE\.chrome-flow-agent" "https://labs.google/fx/tools/flow"
+```
+
+这会打开一个全新的 Chrome 配置文件。你自己在这个窗口里完成 Google 登录，不要把密码、验证码交给 OpenCode。
+
+Chrome 官方明确提醒：连接真实浏览器后，代理可能读取、检查和修改当前浏览器配置文件中的页面、Cookie、Local Storage 和会话数据；所以一定要使用隔离配置文件。[Chrome 自动连接安全说明](https://developer.chrome.com/docs/devtools/agents/use-cases/auto-connect)
+
+## 二、准备 Node.js、npm 和 Chrome
+
+Chrome DevTools MCP 的官方要求包括：
+
+- Node.js LTS
+- npm
+- 当前稳定版 Chrome
+- OpenCode
+
+[官方安装要求](https://developer.chrome.com/docs/devtools/agents/get-started)
+
+安装后先确认：
+
+```powershell
+node --version
+npm --version
+opencode --version
+```
+
+如果这些命令都能返回版本号，基础环境就有了。
+
+## 三、把 Chrome DevTools MCP 加入 OpenCode
+
+最稳妥的方式是让 OpenCode 自己写配置：
+
+```powershell
+opencode mcp add
+```
+
+在向导中填写：
+
+- Server name：`chrome-devtools`
+- Server type：`local`
+- Command：
+
+```text
+npx -y chrome-devtools-mcp@latest --browser-url=http://127.0.0.1:9222 --no-usage-statistics
+```
+
+然后检查连接状态：
+
+```powershell
+opencode mcp list
+```
+
+应该能看到 `chrome-devtools`，状态不能是 disabled 或 error。
+
+如果你想手动编辑 OpenCode 配置，Chrome DevTools 官方仓库给出的 OpenCode 配置形式是：
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--browser-url=http://127.0.0.1:9222",
+        "--no-usage-statistics"
+      ]
+    }
+  }
+}
+```
+
+通常全局配置文件位于：
+
+```text
+%USERPROFILE%\.config\opencode\opencode.json
+```
+
+部分 OpenCode 版本使用新版结构：
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "chrome-devtools": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "chrome-devtools-mcp@latest",
+          "--browser-url=http://127.0.0.1:9222",
+          "--no-usage-statistics"
+        ]
+      }
+    }
+  }
+}
+```
+
+如果出现配置 schema 错误，就使用另一种结构，或者直接使用 `opencode mcp add` 向导。
+
+## 四、先做只读测试
+
+不要一连接成功就让它生成视频。先把下面这段发给 OpenCode：
+
+你已经连接了 chrome-devtools MCP。
+
+现在只进行只读检查，不要点击生成，不要上传文件，不要下载文件，不要登录，不要修改页面。
+
+请完成：
+
+1. 列出当前 Chrome 中可见的页面。
+2. 找到 URL 包含 `labs.google/fx/tools/flow` 的页面。
+3. 读取该页面的标题、URL 和主要可见文字。
+4. 截取当前 Flow 页面截图。
+5. 告诉我你是否具备以下工具：
+   - list_pages
+   - select_page
+   - take_snapshot
+   - take_screenshot
+   - click
+   - type_text 或 fill
+   - upload_file
+
+如果找不到 Flow 页面，或者没有浏览器操作工具，请停止并说明具体缺少什么，不要尝试绕过登录或重新配置浏览器。
+
+如果测试成功，再让它执行第二步：
+
+继续进行只读检查。
+
+请确认：
+
+1. 当前选中的页面确实是 Google Flow。
+2. 页面没有登录弹窗、验证码或浏览器权限弹窗。
+3. 当前 Chrome 只打开了 Flow 相关页面。
+4. 页面中是否存在新建项目、文本生成视频、上传参考图、模型选择、画幅比例和生成按钮。
+
+仍然不要点击生成，不要上传文件，不要下载文件。完成后汇报页面状态。
+
+## 五、让它读取你的项目
+
+你这个项目应该让 OpenCode 从项目根目录启动：
+
+```powershell
+opencode "C:\Users\xx\Desktop\口播-vox"
+```
+
+这样它能直接看到：
+
+```text
+C:\Users\xx\Desktop\口播-vox\handoff.md
+C:\Users\xx\Desktop\口播-vox\master.png
+C:\Users\xx\Desktop\口播-vox\narration.wav
+C:\Users\xx\Desktop\口播-vox\references\
+C:\Users\xx\Desktop\口播-vox\05-video\
+```
+
+然后发送下面这段主任务提示词：
+
+任务：使用已经连接的 Google Flow 浏览器页面，根据项目中的 `handoff.md` 完成视频镜头生成。
+
+项目根目录：
+
+`C:\Users\xx\Desktop\口播-vox`
+
+工作规则：
+
+1. 先完整读取 `handoff.md`，不要修改它。
+2. 先读取并汇总所有镜头的编号、旁白、建议时长、模型、画幅和参考图要求。
+3. 本项目总共 31 个镜头，必须严格按照 `shot-001` 到 `shot-031` 的顺序处理。
+4. 模型使用 Omni Flash，画幅使用 16:9。
+5. 每个镜头使用 handoff.md 中对应代码块里的完整提示词，不要自行改写文案、旁白或镜头意图。
+6. 不要上传 `master.png`。它只是风格说明文件，不是镜头参考图。
+7. 只允许上传以下参考图：
+   - `references\shot-001.png` 用于 shot-001
+   - `references\person-replit.png` 用于 shot-002 和 shot-008
+   - `references\shot-018.png` 用于 shot-018
+   - `references\shot-026.png` 用于 shot-026
+   - `references\shot-030.png` 用于 shot-030
+8. 其他镜头按照 handoff.md 的要求，不上传参考图。
+9. 生成的视频不要加入旁白、音乐或歌词。旁白和最终音频后期处理。
+10. 每次操作前先读取页面状态，不要凭猜测点击。
+11. 生成后检查画面是否有乱码、错误品牌标志、人物变形、错误画幅、镜头内部乱切或明显风格漂移。
+12. 当前文件已经存在：
+    `05-video\shot-001.mp4`
+    不要覆盖它，也不要删除它。
+13. 新生成的文件按以下格式保存：
+    `05-video\shot-002.mp4`
+    `05-video\shot-003.mp4`
+    以此类推。
+14. 如果 Flow 的下载按钮无法直接保存到指定目录，请报告下载文件的位置，不要擅自删除或覆盖文件。
+15. 不要读取其他 Chrome 标签页，不要访问邮箱、网盘、密码管理器或任何与 Flow 无关的网站。
+16. 不要输入密码、验证码、支付信息或安全密钥。
+17. 如果出现 CAPTCHA、登录确认、付款页面或浏览器权限请求，暂停并通知我。
+18. 在真正点击生成、上传参考图或下载视频之前，先向我汇报即将执行的动作和涉及的文件，等待确认。
+
+第一阶段只处理 shot-001、shot-002、shot-003。
+
+请先完成页面状态检查和文件路径检查，不要生成。
+
+## 六、为什么要先做三个镜头
+
+不建议一开始直接让 OpenCode 批量生成 31 个镜头，原因有三个：
+
+1. Flow 页面可能会改版，工具定位会失效。
+2. 生成视频会消耗额度。
+3. 你的提示词非常依赖风格、纸张层次、文字和品牌标志，前几个镜头可以验证整体方向。
+
+等 `shot-001`、`shot-002`、`shot-003` 成功后，再发：
+
+三个测试镜头已经检查完毕。继续处理 `shot-004` 到 `shot-031`。
+
+要求：
+
+1. 仍然只操作 Google Flow 页面。
+2. 严格按照 handoff.md 的镜头顺序。
+3. 每完成一个镜头，检查生成结果后再进入下一个。
+4. 失败镜头只重试必要的镜头，不要重复生成已经合格的镜头。
+5. 不要覆盖已有的 `05-video\shot-001.mp4`。
+6. 每完成 5 个镜头，汇报已完成编号、失败编号、剩余额度或页面错误。
+7. 如果连续两次生成失败，暂停并说明具体原因。
+
+## 七、最终拼接和配音
+
+浏览器 MCP 负责 Flow 部分：
+
+- 打开 Flow
+- 输入提示词
+- 上传参考图
+- 点击生成
+- 检查结果
+- 下载视频
+
+但最终的拼接、配音、字幕通常不属于浏览器控制，而是本地媒体处理。
+
+OpenCode 可以通过本地命令调用 FFmpeg，但需要你提前安装 FFmpeg，并让它检查：
+
+```powershell
+ffmpeg -version
+```
+
+然后再让它：
+
+- 按镜头编号拼接
+- 混入 `narration.wav`
+- 按旁白时间轴调整镜头长度
+- 添加字幕
+- 导出最终视频
+
+这部分建议单独下任务，不要和浏览器生成任务混在一个超长提示里。
+
+## 八、最重要的安全设置
+
+强烈建议：
+
+- 使用专用 Chrome 配置文件
+- 使用 `127.0.0.1`，不要把调试端口暴露到 `0.0.0.0`
+- 不要使用 OpenCode 的 `--auto` 全自动批准模式
+- 不要在同一个 Chrome 配置文件中打开邮箱、网银和密码管理器
+- 不要把密码输入工作交给 OpenCode
+- 出现验证码、支付或二次登录时手动完成
+- 完成后关闭专用 Chrome
+- 完成后执行：
+
+```powershell
+opencode mcp list
+```
+
+确认状态后，再从配置中禁用或删除 `chrome-devtools`
+
+`--no-usage-statistics` 可以关闭 Chrome DevTools MCP 的使用统计，但它不能阻止 OpenCode 读取你已经授权它访问的 Flow 页面内容。[Chrome DevTools MCP 隐私说明](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+
+最后要明确一点：这套方案能让 OpenCode 操作 Flow，但不等于它拥有完整的“电脑控制能力”。它主要控制 Chrome；如果要操作剪辑软件、系统文件对话框或其他桌面程序，还需要额外的桌面自动化工具。

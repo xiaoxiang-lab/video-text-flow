@@ -1,0 +1,215 @@
+{
+  "note": "规则实现覆盖映射（2026-08-17 第 5 轮，P6 防复发）：每条规则 → 校验器实现 + 测试。新增规则时必须在此登记一条，check_docs 扫描完整性（source 存在 + test 含 keyword）。",
+  "rules": [
+    {
+      "id": "dur-slots",
+      "rule": "时长档 ∈ {4,6,8,10}（Flow 档位）",
+      "source": "check_jobcard.VALID_DURATIONS",
+      "test": "test_check_jobcard",
+      "keyword": "时长档"
+    },
+    {
+      "id": "chars-dur",
+      "rule": "超长句 >36 字必须 ≥10s 档",
+      "source": "check_jobcard.check_durations",
+      "test": "test_check_jobcard",
+      "keyword": "超长句"
+    },
+    {
+      "id": "ref-count",
+      "rule": "参考图数量 >8 → warning",
+      "source": "check_jobcard.check_refs",
+      "test": "test_check_jobcard",
+      "keyword": "参考图"
+    },
+    {
+      "id": "ref-prompt-match",
+      "rule": "image_prompt 节镜号集合 == 表格 ✅ 集合",
+      "source": "check_jobcard.check_refs",
+      "test": "test_check_jobcard",
+      "keyword": "image_prompt"
+    },
+    {
+      "id": "throughline",
+      "rule": "贯穿装置节 + 复核记录块存在",
+      "source": "check_jobcard.check_structure",
+      "test": "test_check_jobcard",
+      "keyword": "贯穿装置"
+    },
+    {
+      "id": "delta-math",
+      "rule": "差值 = 时长档 − 自然时长（就近吸附）",
+      "source": "check_jobcard.check_delta",
+      "test": "test_check_jobcard",
+      "keyword": "差值"
+    },
+    {
+      "id": "delta-hard",
+      "rule": "自然 ≥3s ⟹ |差值| ≤ 1.0；短镜 <3s ≤ 3.2",
+      "source": "check_jobcard.DELTA_LIMIT_GE3",
+      "test": "test_check_jobcard",
+      "keyword": "硬规律"
+    },
+    {
+      "id": "delta-rate",
+      "rule": "差值率 >20% → 提示三选项",
+      "source": "check_stage2.compute_delta_rate",
+      "test": "test_check_stage2",
+      "keyword": "差值率"
+    },
+    {
+      "id": "two-types",
+      "rule": "拆镜定型：型列 ∈ 解释/展示",
+      "source": "check_jobcard.check_type",
+      "test": "test_check_jobcard",
+      "keyword": "拆镜定型"
+    },
+    {
+      "id": "display-nosplit",
+      "rule": "展示型不拆分（封顶 10s）",
+      "source": "check_jobcard.check_type",
+      "test": "test_check_jobcard",
+      "keyword": "展示"
+    },
+    {
+      "id": "display-cap",
+      "rule": "展示型自然 >11s 补差可超 1.0（平台上限）",
+      "source": "check_jobcard.check_delta",
+      "test": "test_check_jobcard",
+      "keyword": "15"
+    },
+    {
+      "id": "display-text",
+      "rule": "展示型上屏文字逐字覆盖旁白（拆卡不砍字）",
+      "source": "check_stage2.check_design_internal",
+      "test": "test_check_stage2",
+      "keyword": "逐字"
+    },
+    {
+      "id": "split-over11",
+      "rule": "解释型自然 >11s 必须拆分 + 桥接帧",
+      "source": "check_jobcard.check_split",
+      "test": "test_check_jobcard",
+      "keyword": "拆分"
+    },
+    {
+      "id": "bridge-pair",
+      "rule": "拆分镜 a/b 成对（桥接 ID 一致）",
+      "source": "check_jobcard.check_split",
+      "test": "test_check_jobcard",
+      "keyword": "成对"
+    },
+    {
+      "id": "tail-contract",
+      "rule": "尾部按差值分档（余量静止/补差末帧稳定）",
+      "source": "check_stage2.check_design_internal",
+      "test": "test_check_stage2",
+      "keyword": "尾部"
+    },
+    {
+      "id": "nearest-slot",
+      "rule": "flow_slot 就近吸附（分界 5/7/9）",
+      "source": "check_stage2.flow_slot",
+      "test": "test_check_stage2",
+      "keyword": "flow_slot"
+    },
+    {
+      "id": "handoff-slot",
+      "rule": "handoff Flow 档位 == flow_slot(实测)",
+      "source": "check_stage2.check_handoff_vs_design",
+      "test": "test_check_stage2",
+      "keyword": "Flow 档位"
+    },
+    {
+      "id": "narration-verbatim",
+      "rule": "05→design narration 逐字链",
+      "source": "check_stage2.check_job05_vs_design",
+      "test": "test_check_stage2",
+      "keyword": "narration"
+    },
+    {
+      "id": "bg-swap",
+      "rule": "相邻镜背景不同（每镜换背景）",
+      "source": "check_stage2.check_design_internal",
+      "test": "test_check_stage2",
+      "keyword": "背景"
+    },
+    {
+      "id": "imgprompt-verbatim",
+      "rule": "05→design image_prompt 逐字",
+      "source": "check_stage2.check_job05_vs_design",
+      "test": "test_check_stage2",
+      "keyword": "image_prompt"
+    },
+    {
+      "id": "handoff-vs-design",
+      "rule": "handoff vs design 逐镜一致",
+      "source": "check_stage2.check_handoff_vs_design",
+      "test": "test_check_stage2",
+      "keyword": "handoff"
+    },
+    {
+      "id": "manifest-files",
+      "rule": "manifest 状态 vs 产物文件存在性",
+      "source": "check_stage2.check_manifest_files",
+      "test": "test_check_stage2",
+      "keyword": "manifest"
+    },
+    {
+      "id": "fananqiang",
+      "rule": "翻案腔检测（human-writing 硬禁令）",
+      "source": "check_rewrite",
+      "test": "test_check_rewrite",
+      "keyword": "翻案腔"
+    },
+    {
+      "id": "chain-vertext",
+      "rule": "01→02→03 文本链/数字链/标题/03→05 narration",
+      "source": "check_chain",
+      "test": "test_check_chain",
+      "keyword": "chain"
+    },
+    {
+      "id": "zero-shot-fail",
+      "rule": "解析 0 镜必须报错（防假通过）",
+      "source": "check_storyboard",
+      "test": "test_check_storyboard",
+      "keyword": "0 镜"
+    },
+    {
+      "id": "exempt-visible",
+      "rule": "豁免登记可查（非沉默放行）",
+      "source": "run_all.exempted_types",
+      "test": "test_run_all_project",
+      "keyword": "豁免登记"
+    },
+    {
+      "id": "vendor-hash",
+      "rule": "vendoring 目录级 hash 检测（srt-vox 副本）",
+      "source": "sync_skills.dir_fingerprint",
+      "test": "test_sync_skills",
+      "keyword": "目录级"
+    },
+    {
+      "id": "docs-managed",
+      "rule": "受管数值只出现在正典文件（正典一处）",
+      "source": "check_docs.scan_managed_values",
+      "test": "test_check_docs",
+      "keyword": "受管数值"
+    },
+    {
+      "id": "docs-coverage",
+      "rule": "规则实现覆盖映射（P6 防复发）",
+      "source": "check_docs.check_rule_coverage",
+      "test": "test_check_docs",
+      "keyword": "覆盖"
+    },
+    {
+      "id": "docs-links",
+      "rule": "断链/引用存在性",
+      "source": "check_docs.check_links",
+      "test": "test_check_docs",
+      "keyword": "断链"
+    }
+  ]
+}

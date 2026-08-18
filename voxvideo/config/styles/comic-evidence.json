@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "comic-evidence",
+  "name": "Comic Evidence",
+  "summary": "图像小说式黑白分格 + 证据墙：粗网点、红线、克制的珊瑚红的调查性世界。",
+  "status": "stable",
+  "master_prompt_file": "ref/comic-evidence/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/comic-evidence/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S12-漫画证据.jpg"
+  ],
+  "default_shot_seconds": 4
+}

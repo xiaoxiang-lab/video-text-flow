@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "woodcut-print",
+  "name": "Woodcut Print",
+  "summary": "手工木刻版画世界：刀痕颤纹、油墨压力不均、朱砂红与矿物蓝双专色的暖牛皮纸。",
+  "status": "stable",
+  "master_prompt_file": "ref/woodcut-print/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/woodcut-print/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S13-木刻版画.jpg"
+  ],
+  "default_shot_seconds": 4
+}

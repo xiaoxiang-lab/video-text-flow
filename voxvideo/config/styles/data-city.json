@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "data-city",
+  "name": "Data City",
+  "summary": "等距轴测微缩纸城市：道路变折线、楼体变柱状、街区变占比的数据网格世界。",
+  "status": "stable",
+  "master_prompt_file": "ref/data-city/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/data-city/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S05-数据城市.jpg"
+  ],
+  "default_shot_seconds": 4
+}

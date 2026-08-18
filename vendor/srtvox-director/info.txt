@@ -1,0 +1,170 @@
+﻿=== repo info ===
+desc: 把 SRT 字幕变成 Vox 风格解释视频的分镜与提示词包：21 种风格库、五模式流水线、按 4/6/8/10 秒吸附的分镜算法，只交付提示词，不生成媒体。
+lang: Python
+stars: 43
+updated: 2026-08-15T18:48:59Z
+=== file tree ===
+.gitattributes 682
+.gitignore 842
+README.md 9350
+SKILL.md 14082
+assets/sample-prompts.md 72803
+assets/style-board-prompts.md 62820
+assets/style-board/S01-现代纸艺.jpg 498500
+assets/style-board/S02-黏土定格.jpg 372970
+assets/style-board/S03-毛毡手工.jpg 643663
+assets/style-board/S04-矿彩壁画.jpg 819890
+assets/style-board/S05-数据城市.jpg 504526
+assets/style-board/S06-字体装置.jpg 467282
+assets/style-board/S07-极简几何.jpg 284991
+assets/style-board/S08-水墨长卷.jpg 470306
+assets/style-board/S09-科学切片.jpg 582166
+assets/style-board/S10-历史档案.jpg 542684
+assets/style-board/S11-产品蓝图.jpg 458278
+assets/style-board/S12-漫画证据.jpg 493605
+assets/style-board/S13-木刻版画.jpg 814398
+assets/style-board/S14-剪纸剧场.jpg 374550
+assets/style-board/S15-皮影机械.jpg 712661
+assets/style-board/S16-错位拼贴.jpg 496792
+assets/style-board/S17-深蓝撕纸.jpg 576769
+assets/style-board/S18-马克笔记.jpg 429429
+assets/style-board/S19-博物模型.jpg 290527
+assets/style-board/S20-复古波普.jpg 625505
+assets/style-board/S21-美漫风格.jpg 646409
+assets/style-grid.jpg 1272299
+assets/style-highlight-prompts.md 29698
+assets/style-highlight/S01-现代纸艺.jpg 148610
+assets/style-highlight/S02-黏土定格.jpg 137871
+assets/style-highlight/S03-毛毡手工.jpg 198544
+assets/style-highlight/S04-矿彩壁画.jpg 248605
+assets/style-highlight/S05-数据城市.jpg 194127
+assets/style-highlight/S06-字体装置.jpg 130354
+assets/style-highlight/S07-极简几何.jpg 379892
+assets/style-highlight/S08-水墨长卷.jpg 481960
+assets/style-highlight/S09-科学切片.jpg 673359
+assets/style-highlight/S10-历史档案.jpg 562112
+assets/style-highlight/S11-产品蓝图.jpg 496354
+assets/style-highlight/S12-漫画证据.jpg 729032
+assets/style-highlight/S13-木刻版画.jpg 704272
+assets/style-highlight/S14-剪纸剧场.jpg 468556
+assets/style-highlight/S15-皮影机械.jpg 841685
+assets/style-highlight/S16-错位拼贴.jpg 460056
+assets/style-highlight/S17-深蓝撕纸.jpg 494450
+assets/style-highlight/S18-马克笔记.jpg 266436
+assets/style-highlight/S19-博物模型.jpg 212405
+assets/style-highlight/S20-复古波普.jpg 393437
+assets/style-highlight/S21-美漫风格.jpg 420139
+assets/style-samples/S01-现代纸艺.jpg 880031
+assets/style-samples/S02-黏土定格.jpg 442214
+assets/style-samples/S03-毛毡手工.jpg 960780
+assets/style-samples/S04-矿彩壁画.jpg 1293360
+assets/style-samples/S05-数据城市.jpg 597938
+assets/style-samples/S06-字体装置.jpg 744047
+assets/style-samples/S07-极简几何.jpg 454460
+assets/style-samples/S08-水墨长卷.jpg 434232
+assets/style-samples/S09-科学切片.jpg 390067
+assets/style-samples/S10-历史档案.jpg 551442
+=== README ===
+164 /tmp/readme.md
+# srt-vox-director
+
+## 风格库
+
+21 种，编号连续。**全部用同一个题材、同四件物件、同四处中文生成，唯一变量是风格本身**，
+所以下面这张图可以直接横向比：
+
+![21 种风格样图](assets/style-grid.jpg)
+
+风格不是滤镜，是一整个解释世界——选定后要贯彻到视觉隐喻、主体构建、文字载体、
+运动动词、音效、转场，而不只是背景材质。
+
+---
+把一份**已经写好的 SRT 字幕**，变成可以直接复制去生图、生视频的提示词包。
+
+大多数同类工具从一个选题开始，替你写脚本、配音、渲染，最后吐一个 MP4。
+这个 skill 反过来：**旁白已经存在**，它只负责从字幕到画面的那一段——
+按语义切分镜、锁死视觉圣经、逐镜产出参考图提示词与图生视频提示词。
+
+**它不生成任何图片或视频。** 交付的全部是文本，图和片子由你在自己选的平台上生成。
+「给我提示词」不等于允许生成媒体，这条在任何模式下都不放宽。
+
+**所有提示词都用中文写。** 风格块、参考图提示词、视频提示词、负面约束，一律中文。
+
+## 为什么是 SRT 驱动
+
+旁白全文开局就有，这带来三个同类工具拿不到的好处：
+
+- **选风格不用猜。** 通读全文就能判断题材、信息形状、观众情绪，按七个维度打分推荐，
+  而不是靠用户一句「我想要科技感」去猜。
+- **切分镜有硬边界。** 镜头时长不是编出来的，是从时间码算出来的，
+  因此可以校验：镜头必须无缝覆盖整条时间轴，不留空洞、不重叠。
+- **音画对不上有解。** 平台只能生成 4/6/8/10 秒，与旁白的差值被显式算出来、
+  分正负两种写法编排进提示词，剪辑时一步处理，不会累积漂移。
+
+## 五个模式
+
+| 模式 | 做什么 |
+|---|---|
+| 1 选风格 | 从 21 种里推荐三种、展示样图，定下风格 DNA 与视觉圣经 |
+| 2 切分镜 | 读 SRT，按语义切分并就近吸附到 4/6/8/10 秒，输出分镜表 |
+| 3 出完整包 | 主模式。分批输出参考图提示词与视频提示词 |
+| 4 局部补出 | 只重出某一镜 |
+| 5 诊断修复 | 出图或出片失败时，按症状定位并做最小必要改写 |
+
+默认链路 `1 → 2 → 3`，每步停下来等确认。直接扔一个 SRT 进来就从模式 1 开始。
+
+## 快速开始
+
+```
+把 story.srt 做成解释视频的提示词包
+```
+
+它会依次：读完字幕判断题材 → 推荐三个风格方向并给出样图 → 你选定后出分镜表和规模提示
+→ 确认后分批产出提示词。几十镜的片子会写 `state.json`，回来说「继续」就接着跑。
+
+拿到提示词之后的链路是：图片平台生成 PNG/JPG（**这个文件才是参考图**）→
+图生视频工具上传该图并粘贴视频提示词 → 下载 MP4 → 连同旁白与字幕导入剪辑。
+默认路线 ChatGPT Images → Google Flow → 剪映，可以换成任何同能力的平台。
+
+这张参考图画的是这一镜的**目标构图**，上传后模型把它当垫图、重新生成第 0 帧并演化——
+所以生成片的第 0 帧与上传图常常并不一致，这是正常的。
+
+## 项目结构
+
+```
+srt-vox-director/
+├── SKILL.md                          路由与判定规则，不复述任何表格
+├── assets/
+│   ├── style-grid.jpg                21 张样图拼在一起的横向对比图
+│   ├── style-samples/                S01–S21，同题材同构图的单张样图（给用户选风格）
+│   ├── style-highlight/              S01–S21，分界特写（给用户分辨易混的两条）
+│   ├── style-board/                  S01–S21，六格风格板（给图像模型，出图时上传）
+│   ├── sample-prompts.md             统一变量版样图提示词（21 条，中文）
+│   ├── style-highlight-prompts.md    分界特写提示词（21 条，中文）
+│   └── style-board-prompts.md        风格板提示词（21 条，中文）
+│                                     三份都只在重出图时读，
+│                                     正常流程不要读进上下文
+├── examples/
+│   ├── end-to-end.md                 一个完整走通的范例
+│   └── storyboard-examples.md        分镜算例（从 storyboard-algorithm 移出）
+├── scripts/
+│   ├── _lint_rules.py                校验器共享常量（CLIP_LENGTHS / BANNED / read_text）
+│   ├── check_storyboard.py           分镜表校验器，出片前跑
+│   ├── check_prompts.py              逐镜提示词校验器，每批写完跑
+│   ├── check_state.py                state.json 校验器，续跑前跑
+│   └── check_docs.py                 文档一致性校验器，改文档后跑
+├── tests/
+│   ├── test_checkers.py              校验器回归测试（stdlib unittest）
+│   └── fixtures/                     good/ 已知全过的 3 镜项目，bad/ 故意埋 FAIL
+└── references/
+    ├── style-gallery.md              样图索引与评级
+    ├── style-library.md              21 条风格块（可直接粘贴的中文）
+    ├── style-selector.md             七维打分与自定义风格 DNA
+    ├── storyboard-algorithm.md       分镜算法、吸附表、差值、拆分、校验器
+    ├── storyboard-blueprints.md      九类题材的专属切镜策略
+    ├── prompt-templates.md           模板正典与无效写法对照
+    ├── prompt-keywords.md            上屏文字、渲染路线
+    ├── prompt-motion.md              参考图角色、运动库、收束动作、桥接帧
+    ├── delivery-contract.md          输出段落结构、目录结构、state.json
+    ├── delivery-handoff.md           新手平台交接
+    └── troubleshooting.md            失败症状的

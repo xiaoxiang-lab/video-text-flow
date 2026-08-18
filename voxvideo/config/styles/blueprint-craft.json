@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "blueprint-craft",
+  "name": "Blueprint Craft",
+  "summary": "蓝晒手工系：深蓝底白线稿、坐标网格、纸胶带与橙红点缀，分解图/标注线逻辑，适合 DIY/手工/工程/教育拆解。",
+  "status": "stable",
+  "master_prompt_file": "ref/blueprint-craft/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/blueprint-craft/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S11-产品蓝图.jpg"
+  ],
+  "default_shot_seconds": 4
+}

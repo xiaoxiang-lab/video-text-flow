@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "type-installation",
+  "name": "Type Installation",
+  "summary": "实体印刷字块装置：厚字块、导轨、弹簧、配重的机械字体世界。",
+  "status": "stable",
+  "master_prompt_file": "ref/type-installation/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/type-installation/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S06-字体装置.jpg"
+  ],
+  "default_shot_seconds": 4
+}

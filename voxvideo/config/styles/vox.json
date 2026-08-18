@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "vox",
+  "name": "Vox Editorial Collage",
+  "summary": "做旧档案纸、半调剪影与深景纸艺微缩的严肃解说风格。",
+  "status": "stable",
+  "master_prompt_file": "ref/vox-style/master-prompt.zh.txt",
+  "guide_files": [
+    ".claude/vox-prompts/SKILL.md",
+    "ref/vox-style/image-prompts.zh.md",
+    "ref/vox-style/video-prompts.zh.md"
+  ],
+  "reference_files": [],
+  "default_shot_seconds": 4
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "modern-paper",
+  "name": "Modern Paper Craft",
+  "summary": "暖象牙纸机械、撕边标题、珊瑚红焦点、纸轨道与翻板的当代编辑纸艺世界。",
+  "status": "stable",
+  "master_prompt_file": "ref/modern-paper/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/modern-paper/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S01-现代纸艺.jpg"
+  ],
+  "default_shot_seconds": 4
+}

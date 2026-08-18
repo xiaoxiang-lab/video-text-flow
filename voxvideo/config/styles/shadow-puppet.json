@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "shadow-puppet",
+  "name": "Shadow Puppet",
+  "summary": "皮影机械世界：背光布幕、半透明皮质铰接、竹销关节与暖光热点的因果链装置。",
+  "status": "stable",
+  "master_prompt_file": "ref/shadow-puppet/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/shadow-puppet/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S15-皮影机械.jpg"
+  ],
+  "default_shot_seconds": 4
+}

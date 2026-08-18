@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "warm-illustration",
+  "name": "Warm Illustration",
+  "summary": "温暖插画系：奶油底、暖橙焦糖棕、圆润造型、柔光晕，低对比治愈感，适合情感/心理/人文/健康叙事。",
+  "status": "stable",
+  "master_prompt_file": "ref/warm-illustration/master-prompt.zh.txt",
+  "guide_files": ["ref/warm-illustration/guide.zh.md"],
+  "reference_files": [],
+  "default_shot_seconds": 4
+}

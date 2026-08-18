@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "science-slice",
+  "name": "Science Slice",
+  "summary": "科学教科书剖面世界：真实主体、恰好一个观察窗、半透明纸质地层的精确解剖。",
+  "status": "stable",
+  "master_prompt_file": "ref/science-slice/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/science-slice/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S09-科学切片.jpg"
+  ],
+  "default_shot_seconds": 4
+}

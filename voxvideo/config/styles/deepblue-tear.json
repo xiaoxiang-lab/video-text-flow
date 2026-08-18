@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "deepblue-tear",
+  "name": "Deep-Blue Tear",
+  "summary": "深藏蓝板底撕纸拼贴：米白牛皮纸片、砖红焦点、胶片条与胶带的活泼编辑感。",
+  "status": "stable",
+  "master_prompt_file": "ref/deepblue-tear/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/deepblue-tear/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S17-深蓝撕纸.jpg"
+  ],
+  "default_shot_seconds": 4
+}

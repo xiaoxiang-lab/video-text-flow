@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "museum-model",
+  "name": "Museum Model",
+  "summary": "博物馆微缩景箱世界：暗展厅、聚焦暖色射灯、亮度即层级的导览动线。",
+  "status": "stable",
+  "master_prompt_file": "ref/museum-model/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/museum-model/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S19-博物模型.jpg"
+  ],
+  "default_shot_seconds": 4
+}

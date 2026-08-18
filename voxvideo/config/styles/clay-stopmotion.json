@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "clay-stopmotion",
+  "name": "Clay Stop-Motion",
+  "summary": "手工黏土定格世界：指纹压痕、柔和棚拍投影、温暖俏皮配色的轻科普质感。",
+  "status": "stable",
+  "master_prompt_file": "ref/clay-stopmotion/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/clay-stopmotion/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S02-黏土定格.jpg"
+  ],
+  "default_shot_seconds": 4
+}

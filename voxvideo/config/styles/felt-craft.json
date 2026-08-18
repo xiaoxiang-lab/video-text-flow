@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "felt-craft",
+  "name": "Felt Craft",
+  "summary": "手工毛毡与缝线世界：可见纤维、缝线包边、软塌轮廓、柔和暖光的温暖手作感。",
+  "status": "stable",
+  "master_prompt_file": "ref/felt-craft/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/felt-craft/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S03-毛毡手工.jpg"
+  ],
+  "default_shot_seconds": 4
+}

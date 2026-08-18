@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "offset-collage",
+  "name": "Offset Collage",
+  "summary": "超现实照片拼贴世界：撕纸遮罩、尺度错位、恰好三色的不可能并置。",
+  "status": "stable",
+  "master_prompt_file": "ref/offset-collage/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/offset-collage/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S16-错位拼贴.jpg"
+  ],
+  "default_shot_seconds": 4
+}

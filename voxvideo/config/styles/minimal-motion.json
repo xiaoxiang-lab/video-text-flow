@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "minimal-motion",
+  "name": "Minimal Motion",
+  "summary": "极简动态系：白底墨黑、单强调色、扁平几何、巨型数字，聚焦信息本身，适合效率/方法论/工具/职场干货。",
+  "status": "stable",
+  "master_prompt_file": "ref/minimal-motion/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/minimal-motion/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S07-极简几何.jpg"
+  ],
+  "default_shot_seconds": 4
+}

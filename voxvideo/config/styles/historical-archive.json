@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "historical-archive",
+  "name": "Historical Archive",
+  "summary": "俯拍旧档案桌世界：泛黄文件、地图、黑白照片、棉线与黄铜图钉的严肃纪实感。",
+  "status": "stable",
+  "master_prompt_file": "ref/historical-archive/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/historical-archive/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S10-历史档案.jpg"
+  ],
+  "default_shot_seconds": 4
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "mineral-fresco",
+  "name": "Mineral Fresco",
+  "summary": "矿物颜料壁画世界：砂岩米、青金蓝、孔雀石绿、克制朱砂的墙面残片与风化质感。",
+  "status": "stable",
+  "master_prompt_file": "ref/mineral-fresco/master-prompt.zh.txt",
+  "guide_files": [
+    "ref/mineral-fresco/guide.zh.md"
+  ],
+  "reference_files": [
+    "ref/style-assets/style-samples/S04-矿彩壁画.jpg"
+  ],
+  "default_shot_seconds": 4
+}

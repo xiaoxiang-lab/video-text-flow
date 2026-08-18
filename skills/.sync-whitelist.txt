@@ -1,0 +1,10 @@
+﻿# 本项目使用的 skill 白名单（每行一个，sync_skills.py 按此同步全局→项目快照）
+# 新增项目依赖的 skill 时，把名字加进这里；无关 skill 不复制
+# 注：vox-prompts 是 chupian-vox 的依赖，源在 voxvideo 项目（EXTRA_SOURCES）
+human-writing
+杜蕾斯文案skill
+visual-cover
+chupian-vox
+vox-prompts
+flow-generate
+srtvox-director
