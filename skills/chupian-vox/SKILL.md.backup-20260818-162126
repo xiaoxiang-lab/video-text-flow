@@ -59,27 +59,11 @@ python -m voxvideo resume --project <id> / status --project <id>    # 续跑 / �
 
 ## 边界（很重要）
 
-- **素材包阶段**：AI 在导出 `04-prompts/handoff.md` 那一刻完成素材包交付。逐镜生成视频、下载由用户手工完成，AI 不参与，也不要替用户下载视频或调用浏览器自动化。
-- **成片阶段**：当用户拿到生成的视频片段后要求"合成视频"、"出成片"、"合并MP4"等，AI 必须按下方「成片阶段（强制流程）」执行完整链路，不得简化为单纯视频拼接。
-- 项目目录 `projects/YYYYMMDD-topic/` 按 01-script … 05-video 分类，技术状态放 `.work/`，不与交付混放。
-
-## 成片阶段（强制流程）
-
-**触发条件**：用户拿到 Flow 生成的视频片段后，要求"合成视频"、"出成片"、"合并MP4"、"加字幕"等——必须执行以下完整链路，不得简化为单纯视频拼接。
-
-**完整流程**（按顺序执行，每步都不可跳过）：
-
-1. **视频裁尾对齐**（H3）：视频时长 > 旁白实测时长时，`ffmpeg -t <旁白时长>` 裁前段（落点定格后裁剪，比大比例变速自然）。变速（atempo）只做 ≤5% 收尾。
-2. **拼接**：所有镜视频按顺序 concat 拼接成完整视频。
-3. **混音旁白**（H6/N13）：视频原声（Flow 音效）volume=0.6 + 旁白 TTS volume=1.5，`amix=inputs=2:duration=first`，`normalize=0` 防减半。验证：合成后用 whisper 转写成片音轨，能转出旁白文字 = 混入成功；只转出零碎音效 = 漏混。
-4. **Whisper 转写**：WSL faster-whisper-large-v3 逐句时间戳转写。whisper 转写中文会错字，**用旁白原文替换转写文本，时间戳保留**（按 segments 顺序对应原文句）。
-5. **ASS 字幕烧录**（H2）：黑底白字条样式（`BorderStyle=3` + `BackColour=&H64000000` 60% 透明黑 + 白字 + `Alignment=2` 底部居中 + `MarginV=26`；字体 `Microsoft YaHei`）。ffmpeg `-vf subtitles=subs.ass` 烧录，directwrite 自动找到中文字体（**不要加 fontsdir 参数**，Windows 路径转义会解析失败）。
-6. **导出 final-subs.mp4**：最终成品，带句级字幕的完整视频。
-
-**关键纪律**：
-- **烧录字幕 vs 后期字幕不能混**（H4）：提示词里写字幕条（Flow 烧录）就必须删掉后期 ASS，反之亦然。凡是定了「后期句级字幕」，video_prompt 里绝不能出现「字幕条」字样。
-- **脚本工具**：使用项目 `scripts/merge-video.py`（裁尾对齐 + 拼接 + 混音）和 `scripts/gen-ass.py`（生成 ASS 字幕），不手动拼 ffmpeg 命令。
-- **验证必须做**：混音验证（whisper 能转出旁白）+ 字幕验证（MiMo 抽帧确认文字正确无乱码）。
+- AI 在导出 `04-prompts/handoff.md` 那一刻收工。逐镜生成视频、下载、拼接、
+  混入 `02-audio/narration.wav`、加字幕、导出成片——全部由用户手工完成，
+  AI 不参与，也不要替用户下载视频或调用浏览器自动化。
+- 项目目录 `projects/YYYYMMDD-topic/` 按 01-script … 05-video 分类，
+  技术状态放 `.work/`，不与交付混放。
 
 ## 用户环境注意
 
@@ -92,15 +76,6 @@ python -m voxvideo resume --project <id> / status --project <id>    # 续跑 / �
 
 本 skill 带实战经验库，与 SKILL.md 同目录的 **`LESSONS.md`** 是成长日志，**`vox-director-method.zh.md`** 是从教程视频蒸馏的 VOX 导演方法论（拆镜定性、参考图提示词模板、时间轴动作写法、题材视觉库、风格切换锚点），**`style-library.zh.md`** 是风格库选型速查与工作流（6 风格总表 + 选型规则 + 用户流程）。
 
-**启用时**：先读 `LESSONS.md`，其中已验证的经验条目与 SKILL.md 冲突时，以日期更新在后者为准。
-
-**实战后**：每次完整任务收尾时，把本次踩过的坑、验证过的模型行为、流程优化沉淀成
-   `[日期] 类别：现象 → 原因 → 解法/规则` 条目追加进 `LESSONS.md`（不重复已有条目，只补增量）。
-
-**沉淀标准**：下次实战能直接照做的才算有价值；一次性的偶发问题（如临时网络抖动）不记。
-
-**环境相关重大变化**（如换图片后端、Flow 档位变化）必须追加条目，防止新会话重复踩坑。
-
 ## 风格库与选型工作流（用户只给文案，AI 定风格）
 
 - 24 个已注册风格：`vox`（档案做旧，严肃/科技/商业）、`fresh-scrapbook`（清新手账，生活/美食/旅行）、`warm-illustration`（温暖插画，情感/心理/人文）、`ink-scroll`（水墨国风，文化/历史/文学）、`blueprint-craft`（蓝晒手工，DIY/工程/拆解）、`minimal-motion`（极简动态，效率/方法论/干货），以及 2026-08-17 第二步新增的 18 个（modern-paper/clay-stopmotion/felt-craft/mineral-fresco/data-city/type-installation/science-slice/historical-archive/comic-evidence/woodcut-print/paper-cut-theater/shadow-puppet/offset-collage/deepblue-tear/marker-notes/museum-model/retro-pop/comic-style）——全表与选型规则见 `style-library.zh.md`。
@@ -109,3 +84,9 @@ python -m voxvideo resume --project <id> / status --project <id>    # 续跑 / �
 - **风格板上传**：出图时把 `ref/style-assets/style-board/<id>.jpg` 与参考图提示词一起上传，配反泄漏追加语（只学材质配色，不学分区布局）。
 - 用户只负责文案时：AI 主动推荐风格（说明气质差异），不默认选 vox。
 - 同一项目中途不得静默换风格；换风格 = 重新拆镜。
+
+1. **启用时**：先读 `LESSONS.md`，其中已验证的经验条目与 SKILL.md 冲突时，以日期更新在后者为准。
+2. **实战后**：每次完整任务收尾时，把本次踩过的坑、验证过的模型行为、流程优化沉淀成
+   `[日期] 类别：现象 → 原因 → 解法/规则` 条目追加进 `LESSONS.md`（不重复已有条目，只补增量）。
+3. 沉淀标准：下次实战能直接照做的才算有价值；一次性的偶发问题（如临时网络抖动）不记。
+4. 环境相关重大变化（如换图片后端、Flow 档位变化）必须追加条目，防止新会话重复踩坑。

@@ -210,3 +210,17 @@ P8 manifest 状态机 vs 产物文件无一致性校验（images=completed 但�
   - 阶段 3 早期项：拆镜作业单→design.json 生成器（05 是 Markdown 表格，需翻译成 design.json shots 结构）
   - 阶段 4 仓库化：voxvideo（Default Project）与 video-text-flow 的关系（独立仓库/子模块/整合）
   - skill 同步纪律：改全局 skill 后必须同步项目副本（skills/README.md 登记）；flow-generate skill 建立后登记
+
+## 成片阶段流程修复（2026-08-18）
+
+```
+问题：新对话启用 chupian-vox skill 时，没有先读 LESSONS.md，导致用户要求"合成视频"时简化为单纯视频拼接，
+  漏掉裁尾对齐、whisper 转写、ASS 字幕烧录等步骤。
+根本原因：SKILL.md 只定义了"到导出 handoff 为止"的流程，没有写"素材包导出后、用户要求出成片"时的标准流程。
+  LESSONS.md H1 节是经验记录，不是强制流程，新对话不一定会读。
+解决方案：在 SKILL.md 的「边界」部分明确区分「素材包阶段」和「成片阶段」，并新增「成片阶段（强制流程）」章节，
+  详细说明完整链路：视频裁尾对齐 → 拼接 → 混音旁白 → Whisper 转写 → ASS 字幕烧录 → 导出 final-subs.mp4。
+效果：每次启用 skill 都会读到成片流程，不依赖经验记录，确保用户要求出成片时执行完整链路。
+备份：SKILL.md.backup-20260818-HHMMSS 已保存。
+同步：python checks/sync_skills.py --apply 已执行，chupian-vox 状态从 same 变为 update。
+```
